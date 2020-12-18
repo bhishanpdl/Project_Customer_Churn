@@ -6,10 +6,7 @@ the models using train data and evaluated model results in test data.
 
 # Data description
 ![](images/data_describe.png)
-![](images/Churn.png)
-![](images/Gender_Churn.png)
-![](images/MonthlyCharges_Churn.png)
-![](images/SeniorCitizen_vs_Churn.png)
+
 
 # Data Processing
 - Missing Value imputation for `TotalCharges` with 0.
