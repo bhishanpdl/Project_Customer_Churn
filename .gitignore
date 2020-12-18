@@ -4,6 +4,8 @@
 data/very_large_data.csv
 *catboost_info*
 *.h5 # saved keras models
+notebooks/mlruns*  # pycaret creates notebooks/mlruns/0 1 etc folders
+notebooks/logs.log
 
 ##==============================================
 ## Compressed files

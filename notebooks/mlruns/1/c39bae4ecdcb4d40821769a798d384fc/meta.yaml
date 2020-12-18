@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/poudel/github/Project_Customer_Churn/notebooks/mlruns/1/c39bae4ecdcb4d40821769a798d384fc/artifacts
+end_time: 1608236080259
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: c39bae4ecdcb4d40821769a798d384fc
+run_uuid: c39bae4ecdcb4d40821769a798d384fc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1608236080066
+status: 3
+tags: []
+user_id: Bhishan
