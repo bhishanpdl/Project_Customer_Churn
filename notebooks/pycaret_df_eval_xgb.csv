@@ -1,0 +1,2 @@
+Model,Description,Accuracy,AUC,Recall,Precision,F1,Kappa,MCC,LogLoss
+xgboost,default,0.7886,0.8265,0.5185,0.6217,0.5651,0.427,0.4303,7.303
