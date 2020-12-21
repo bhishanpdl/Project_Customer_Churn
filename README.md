@@ -4,6 +4,22 @@ data to determine whether the customer will churn (leave the company) or not.
 I splitted the kaggle training data into train and test (80%/20%) and fitted
 the models using train data and evaluated model results in test data.
 
+I used mainly the semi automatic learning module `pycaret` for this project.
+I also used usual boosting modules (`xgboost,lightgbm,catboost`) and regular
+sklearn models.
+
+In real life the cost of misclassifying leaving customer and not-leaving
+customer is different. In this project I defined the PROFIT metric as following:
+
+profit = +$400  for TP (true positive)
+profit = 0      for TN (true negative)
+profit = -$100  for FP (false positive)
+profit = -$200  for FN (false negative)
+
+After testing various models with extensive feature engineering, I found that
+the linear discrimant analysis (LDA) of pycart model gave me the best profit.
+(Detailed comparison is given at the end of the page).
+
 # Data description
 ![](images/data_describe.png)
 
@@ -28,13 +44,27 @@ the models using train data and evaluated model results in test data.
       Accuracy  Precision Recall    F1-score    AUC
 LR    0.4450    0.3075    0.8717    0.4547    0.5812
 
-                    Predicted-noChurn  Predicted-Churn
-Original no-Churn    [[301             734]
-Original Churn       [ 48              326]]
+                                                         Predicted
+
+                    Predicted-noChurn  Predicted-Churn    0    1
+Original no-Churn    [[301             734]               TN   FP
+Original Churn       [ 48              326]]              FN   TP
 
 
- Lets choose cost of False Negative is 2$ and cost of False positive is 1$.
- cost = 48*2 + 734 = 830
+Let's make following assumptions
+TP = +$400
+TN = 0
+FP = -$100
+FN = -$200
+
+profit = tn*0 + fp*(-100) + fn*(-200) + tp*400
+       = 400*tp - 200*fn - 100*fp
+
+tn,fp,fn,tp = confusion_matrix(y_true,y_pred)
+
+             LAST+    2ndrow  1strow
+profit = 400*326 - 200*48 - 100*734
+       = 47400
 ```
 
 # Boosting: Xgboost
@@ -49,7 +79,8 @@ xgboost  0.7417   0.5083     0.8235  0.6286   0.7678
 [[737 298]
  [ 66 308]]
 
- cost = 66*2 + 298 = 430
+profit = 400*308 - 200*66 - 100*298
+       = 80,200
 ```
 
 # Modelling Pycaret
@@ -74,7 +105,8 @@ pycaret_lr    0.7509 0.5199    0.8021    0.6309      0.7673
 [[758 277]
  [ 74 300]]
 
-cost = 74*2 + 277 = 425
+profit = 400*300 - 200*74 - 100*277
+       = 77,500
 
 Pycaret Naive Bayes
 ==============================================================
@@ -83,7 +115,8 @@ pycaret_nb  0.7296    0.4943    0.8102    0.6140      0.7553
 [[725 310]
  [ 71 303]]
 
-cost = 71*2 + 310 = 452
+profit = 400*303 - 200*71 - 100*310
+       = 76,000
 
 Pycaret Xgboost (Takes long time, more than 1 hr)
 ===============================================================
@@ -93,7 +126,9 @@ pycaret_xgboost    0.7601  0.5342    0.7513  0.6244    0.7573
 
 [[790 245]
  [ 93 281]]
- cost = 93*2 + 245 = 431
+
+profit = 400*281 - 200*93 - 100*245
+       = 69,300
 
  Pycaret LDA (Takes medium time, 5 mintues)
 ================================================================
@@ -106,7 +141,8 @@ pycaret_lda    0.7062    0.4704       0.8503    0.6057    0.7522
 [[677 358]
  [ 56 318]]
 
- cost = 56*2 + 358 = 470
+profit = 400*318 - 200*56 - 100*358
+       = 80,200
 ```
 
 # Deep Learning models
@@ -134,7 +170,8 @@ keras 0.6849    0.4422    0.7166    0.5469    0.6950
 [[697 338]
  [106 268]]
 
-cost = 106*2 + 338 = 550
+profit = 400*268 - 200*106 - 100*338
+       = 52,200
 ```
 
 # Model Comparion
@@ -146,14 +183,20 @@ The useful metrics are AUC and Recall.
 - The pure xgboost model gave me the best area under the curve (AUCROC).
 - The pure logistic regression model gave me the best Recall.
 
-Cost = False Negative * 2 + False Positive
+Profit = 400*TP  - 200*FN - 100*FP
 
-                 Accuracy   Precision Recall       F1-score       AUC  Cost
-pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  425
-xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  430
-pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  431
-pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  452
-pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  470
-keras            0.684883   0.442244  0.716578     0.546939  0.695004  550
-LR               0.444996   0.307547  0.871658     0.454672  0.581240  830
+TP = +$400 ==> incentivize the customer to stay, and sign a new contract.
+TN = 0
+FP = -$100 ==> marketing and effort used to try to retain the user
+FN = -$200 ==> revenue from losing a customer
+
+                 Accuracy   Precision Recall       F1-score       AUC  Profit
+-------------------------------------------------------------------------------
+pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
+xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  $80,200
+pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500
+pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  $76,000
+pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  $69,300
+keras            0.684883   0.442244  0.716578     0.546939  0.695004  $52,200
+LR               0.444996   0.307547  0.871658     0.454672  0.581240  $47,400
 ```
