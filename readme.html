@@ -18,24 +18,29 @@
 <li>Used <code>yeo-johnson</code> transformers instead of standard scaling since the numerical features were not normal.</li>
 <li>Tuned the model using <a href="https://github.com/thuijskens/scikit-hyperband">hyperband</a> library.</li>
 </ul>
-<pre><code>   Accuracy Precision   Recall  F1-score    AUC
-LR  0.4450  0.3075  0.8717  0.4547  0.5812
+<pre><code>      Accuracy  Precision Recall    F1-score    AUC
+LR    0.4450    0.3075    0.8717    0.4547    0.5812
 
-[[301 734]
- [ 48 326]]</code></pre>
+                    Predicted-noChurn  Predicted-Churn
+Original no-Churn    [[301             734]
+Original Churn       [ 48              326]]
+
+
+ Lets choose cost of False Negative is 2$ and cost of False positive is 1$.
+ cost = 48*2 + 734 = 830</code></pre>
 <h1 id="boosting-xgboost">Boosting: Xgboost</h1>
 <ul>
 <li>Used minimal feature engineering.</li>
 <li>Get dummy featrues using <code>drop_first=False</code></li>
 <li>Used xgb classifier with validation set and eval metric <code>aucpr</code>.</li>
 </ul>
-<pre><code>
-
-         Accuracy Precision  Recall  F1-score AUC
-xgboost 0.7417   0.5083     0.8235  0.6286   0.7678
+<pre><code>         Accuracy Precision  Recall  F1-score AUC
+xgboost  0.7417   0.5083     0.8235  0.6286   0.7678
 
 [[737 298]
- [ 66 308]]</code></pre>
+ [ 66 308]]
+
+ cost = 66*2 + 298 = 430</code></pre>
 <h1 id="modelling-pycaret">Modelling Pycaret</h1>
 <ul>
 <li>Used detailed cleaned data.</li>
@@ -48,28 +53,46 @@ xgboost 0.7417   0.5083     0.8235  0.6286   0.7678
 </ul>
 <p><img src="images/pycaret_compare_models.png" /> <img src="images/pycaret_lr.png" /></p>
 <pre><code>Pycaret Logistic Regression
-=============================
+==============================================================
             Accuracy Precision Recall    F1-score    AUC
 pycaret_lr    0.7509 0.5199    0.8021    0.6309      0.7673
 
 [[758 277]
  [ 74 300]]
 
+cost = 74*2 + 277 = 425
+
 Pycaret Naive Bayes
-=============================
+==============================================================
             Accuracy  Precision Recall    F1-score    AUC
-pycaret_nb  0.7296    0.4943    0.8102    0.6140    0.7553
+pycaret_nb  0.7296    0.4943    0.8102    0.6140      0.7553
 [[725 310]
  [ 71 303]]
 
+cost = 71*2 + 310 = 452
+
 Pycaret Xgboost (Takes long time, more than 1 hr)
-==================================
+===============================================================
 
                   Accuracy Precision Recall  F1-score  AUC
 pycaret_xgboost    0.7601  0.5342    0.7513  0.6244    0.7573
 
 [[790 245]
- [ 93 281]]</code></pre>
+ [ 93 281]]
+ cost = 93*2 + 245 = 431
+
+ Pycaret LDA (Takes medium time, 5 mintues)
+================================================================
+- Used polynomial features and fix imbalanced data.
+
+               Accuracy  Precision    Recall    F1-score  AUC
+pycaret_lda    0.7062    0.4704       0.8503    0.6057    0.7522
+
+
+[[677 358]
+ [ 56 318]]
+
+ cost = 56*2 + 358 = 470</code></pre>
 <h1 id="deep-learning-models">Deep Learning models</h1>
 <ul>
 <li>Used minimal data processing.</li>
@@ -92,7 +115,9 @@ pycaret_xgboost    0.7601  0.5342    0.7513  0.6244    0.7573
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      Accuracy  Precision Recall    F1<span class="op">-</span>score    AUC</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>keras <span class="fl">0.6849</span>    <span class="fl">0.4422</span>    <span class="fl">0.7166</span>    <span class="fl">0.5469</span>    <span class="fl">0.6950</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">697</span> <span class="dv">338</span>]</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span></code></pre></div>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>cost <span class="op">=</span> <span class="dv">106</span><span class="op">*</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">338</span> <span class="op">=</span> <span class="dv">550</span></span></code></pre></div>
 <h1 id="model-comparion">Model Comparion</h1>
 <pre><code>This is a imbalanced binary classification.
 The useful metrics are AUC and Recall.
@@ -100,12 +125,13 @@ The useful metrics are AUC and Recall.
 - The pure xgboost model gave me the best area under the curve (AUCROC).
 - The pure logistic regression model gave me the best Recall.
 
-                 Accuracy   Precision Recall       F1-score       AUC
-pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253
-xgboost_1        0.766501   0.544554  0.735294     0.625711  0.756536
-xgboost          0.741661   0.508251  0.823529     0.628571  0.767803**
-keras_2          0.734564   0.000000  0.000000     0.000000  0.500000
-keras            0.684883   0.442244  0.716578     0.546939  0.695004
-pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311
-pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322
-LR               0.444996   0.307547  0.871658**  0.454672  0.581240</code></pre>
+Cost = False Negative * 2 + False Positive
+
+                 Accuracy   Precision Recall       F1-score       AUC  Cost
+pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  425
+xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  430
+pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  431
+pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  452
+pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  470
+keras            0.684883   0.442244  0.716578     0.546939  0.695004  550
+LR               0.444996   0.307547  0.871658     0.454672  0.581240  830</code></pre>
