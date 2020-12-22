@@ -145,6 +145,23 @@ profit = 400*318 - 200*56 - 100*358
        = 80,200
 ```
 
+# EvalML method
+- Minimal data processing (dropped gender and make some features numeric)
+- evalml itself deals with missing values and categorical features.
+
+```
+          Accuracy  Precision Recall    F1-score  AUC
+evalml    0.7977    0.6369    0.5535    0.5923    0.7197
+
+[[917 118]
+ [167 207]]
+
+profit = 400*207 - 200*167 - 100*118
+       = 37,600
+
+```
+
+
 # Deep Learning models
 - Used minimal data processing.
 - Dropped `customerID` and `gender`.
@@ -174,7 +191,7 @@ profit = 400*268 - 200*106 - 100*338
        = 52,200
 ```
 
-# Model Comparion
+# Model Comparison
 
 ```
 This is a imbalanced binary classification.
@@ -199,4 +216,5 @@ pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  $76,000
 pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  $69,300
 keras            0.684883   0.442244  0.716578     0.546939  0.695004  $52,200
 LR               0.444996   0.307547  0.871658     0.454672  0.581240  $47,400
+evalml           0.7977     0.6369    0.5535       0.5923    0.719700  $37,600
 ```
