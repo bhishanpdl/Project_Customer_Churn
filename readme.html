@@ -3,7 +3,7 @@
 <p>I used mainly the semi automatic learning module <code>pycaret</code> for this project. I also used usual boosting modules (<code>xgboost,lightgbm,catboost</code>) and regular sklearn models.</p>
 <p>In real life the cost of misclassifying leaving customer and not-leaving customer is different. In this project I defined the PROFIT metric as following:</p>
 <p>profit = +$400 for TP (true positive) profit = 0 for TN (true negative) profit = -$100 for FP (false positive) profit = -$200 for FN (false negative)</p>
-<p>After testing various models with extensive feature engineering, I found that the linear discrimant analysis (LDA) of pycart model gave me the best profit. (Detailed comparison is given at the end of the page).</p>
+<p>After testing various models with extensive feature engineering, I found that the logistic regression cv algorithm gave the best profit.</p>
 <h1 id="data-description">Data description</h1>
 <p><img src="images/data_describe.png" /></p>
 <h1 id="data-processing">Data Processing</h1>
@@ -15,7 +15,7 @@
 <li>Boolean Features. e.g. Does someone have Contract or not.</li>
 <li>Aggregation features. eg. Mean of <code>TotalCharges</code> per <code>Contract</code>.</li>
 </ul>
-<h1 id="sklearn-methods-logistic-regression">Sklearn Methods: Logistic Regression</h1>
+<h1 id="sklearn-methods-logisticregression-and-logisticregressioncv">Sklearn Methods: LogisticRegression and LogisticRegressionCV</h1>
 <ul>
 <li>Used raw data with new features from EDA.</li>
 <li>Used SMOTE oversampling since data is imbalanced.</li>
@@ -45,7 +45,18 @@ tn,fp,fn,tp = confusion_matrix(y_true,y_pred)
 
              LAST+    2ndrow  1strow
 profit = 400*326 - 200*48 - 100*734
-       = 47400</code></pre>
+       = 47400
+
+
+============================ LogisticRegressoinCv======================
+
+        Accuracy  Precision Recall    F1-score    AUC
+LRCV    0.7367    0.5024    0.8396    0.6286    0.7695
+
+[[724 311]
+ [ 60 314]]
+
+profit = 82,500</code></pre>
 <h1 id="boosting-xgboost">Boosting: Xgboost</h1>
 <ul>
 <li>Used minimal feature engineering.</li>
@@ -117,6 +128,20 @@ pycaret_lda    0.7062    0.4704       0.8503    0.6057    0.7522
 
 profit = 400*318 - 200*56 - 100*358
        = 80,200</code></pre>
+<h1 id="evalml-method">EvalML method</h1>
+<ul>
+<li>Minimal data processing (dropped gender and make some features numeric)</li>
+<li>evalml itself deals with missing values and categorical features.</li>
+</ul>
+<pre><code>          Accuracy  Precision Recall    F1-score  AUC
+evalml    0.7977    0.6369    0.5535    0.5923    0.7197
+
+[[917 118]
+ [167 207]]
+
+profit = 400*207 - 200*167 - 100*118
+       = 37,600
+</code></pre>
 <h1 id="deep-learning-models">Deep Learning models</h1>
 <ul>
 <li>Used minimal data processing.</li>
@@ -127,28 +152,33 @@ profit = 400*318 - 200*56 - 100*358
 <li>Used <code>class_weight</code> parameter to deal with imbalanced data.</li>
 <li>Tuned keras model with scikitlearn <code>GridSearchCV</code></li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Model parameters</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>{<span class="st">&#39;activation&#39;</span>: <span class="st">&#39;sigmoid&#39;</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;batch_size&#39;</span>: <span class="dv">128</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;epochs&#39;</span>: <span class="dv">30</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;n_feats&#39;</span>: <span class="dv">43</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;units&#39;</span>: (<span class="dv">45</span>, <span class="dv">30</span>, <span class="dv">15</span>)}</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>NOTE: The result changes each time even <span class="cf">if</span> I <span class="bu">set</span> SEED <span class="cf">for</span> everything.</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      Accuracy  Precision Recall    F1<span class="op">-</span>score    AUC</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>keras <span class="fl">0.6849</span>    <span class="fl">0.4422</span>    <span class="fl">0.7166</span>    <span class="fl">0.5469</span>    <span class="fl">0.6950</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">697</span> <span class="dv">338</span>]</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>profit <span class="op">=</span> <span class="dv">400</span><span class="op">*</span><span class="dv">268</span> <span class="op">-</span> <span class="dv">200</span><span class="op">*</span><span class="dv">106</span> <span class="op">-</span> <span class="dv">100</span><span class="op">*</span><span class="dv">338</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>       <span class="op">=</span> <span class="dv">52</span>,<span class="dv">200</span></span></code></pre></div>
-<h1 id="model-comparion">Model Comparion</h1>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Model parameters</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>{<span class="st">&#39;activation&#39;</span>: <span class="st">&#39;sigmoid&#39;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;batch_size&#39;</span>: <span class="dv">128</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;epochs&#39;</span>: <span class="dv">30</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;n_feats&#39;</span>: <span class="dv">43</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;units&#39;</span>: (<span class="dv">45</span>, <span class="dv">30</span>, <span class="dv">15</span>)}</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>NOTE: The result changes each time even <span class="cf">if</span> I <span class="bu">set</span> SEED <span class="cf">for</span> everything.</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      Accuracy  Precision Recall    F1<span class="op">-</span>score    AUC</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>keras <span class="fl">0.6849</span>    <span class="fl">0.4422</span>    <span class="fl">0.7166</span>    <span class="fl">0.5469</span>    <span class="fl">0.6950</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">697</span> <span class="dv">338</span>]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>profit <span class="op">=</span> <span class="dv">400</span><span class="op">*</span><span class="dv">268</span> <span class="op">-</span> <span class="dv">200</span><span class="op">*</span><span class="dv">106</span> <span class="op">-</span> <span class="dv">100</span><span class="op">*</span><span class="dv">338</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>       <span class="op">=</span> <span class="dv">52</span>,<span class="dv">200</span></span></code></pre></div>
+<h1 id="model-comparison">Model Comparison</h1>
 <pre><code>This is a imbalanced binary classification.
 The useful metrics are AUC and Recall.
+Here I defined a custom metric &quot;profit&quot; based on confusin matrix elements.
 
-- The pure xgboost model gave me the best area under the curve (AUCROC).
-- The pure logistic regression model gave me the best Recall.
+- Logistic regression cv algorigthm gave me the best profit.
+- I used custom feature engineering of the data.
+- SMOTE oversampling gave worse result than no resampling.
+  (note: I have used class_weight=&#39;balanced&#39;)
+- Elasticnet penalty gave worse result than l2 penalty.
+- Make custom loss scorer instead of default scoring such as f1,roc_auc,recall.
 
 Profit = 400*TP  - 200*FN - 100*FP
 
@@ -159,10 +189,12 @@ FN = -$200 ==&gt; revenue from losing a customer
 
                  Accuracy   Precision Recall       F1-score       AUC  Profit
 -------------------------------------------------------------------------------
+LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
 xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500
 pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  $76,000
 pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  $69,300
 keras            0.684883   0.442244  0.716578     0.546939  0.695004  $52,200
-LR               0.444996   0.307547  0.871658     0.454672  0.581240  $47,400</code></pre>
+LR               0.444996   0.307547  0.871658     0.454672  0.581240  $47,400
+evalml           0.7977     0.6369    0.5535       0.5923    0.719700  $37,600</code></pre>

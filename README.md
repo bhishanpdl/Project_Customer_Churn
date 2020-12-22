@@ -17,8 +17,7 @@ profit = -$100  for FP (false positive)
 profit = -$200  for FN (false negative)
 
 After testing various models with extensive feature engineering, I found that
-the linear discrimant analysis (LDA) of pycart model gave me the best profit.
-(Detailed comparison is given at the end of the page).
+the logistic regression cv algorithm gave the best profit.
 
 # Data description
 ![](images/data_describe.png)
@@ -33,7 +32,7 @@ the linear discrimant analysis (LDA) of pycart model gave me the best profit.
 - Aggregation features. eg. Mean of `TotalCharges` per `Contract`.
 
 
-# Sklearn Methods: Logistic Regression
+# Sklearn Methods: LogisticRegression and LogisticRegressionCV
 - Used raw data with new features from EDA.
 - Used SMOTE oversampling since data is imbalanced.
 - Used `yeo-johnson` transformers instead of standard scaling since the numerical features were not normal.
@@ -65,6 +64,17 @@ tn,fp,fn,tp = confusion_matrix(y_true,y_pred)
              LAST+    2ndrow  1strow
 profit = 400*326 - 200*48 - 100*734
        = 47400
+
+
+============================ LogisticRegressoinCv======================
+
+        Accuracy  Precision Recall    F1-score    AUC
+LRCV    0.7367    0.5024    0.8396    0.6286    0.7695
+
+[[724 311]
+ [ 60 314]]
+
+profit = 82,500
 ```
 
 # Boosting: Xgboost
@@ -196,9 +206,14 @@ profit = 400*268 - 200*106 - 100*338
 ```
 This is a imbalanced binary classification.
 The useful metrics are AUC and Recall.
+Here I defined a custom metric "profit" based on confusin matrix elements.
 
-- The pure xgboost model gave me the best area under the curve (AUCROC).
-- The pure logistic regression model gave me the best Recall.
+- Logistic regression cv algorigthm gave me the best profit.
+- I used custom feature engineering of the data.
+- SMOTE oversampling gave worse result than no resampling.
+  (note: I have used class_weight='balanced')
+- Elasticnet penalty gave worse result than l2 penalty.
+- Make custom loss scorer instead of default scoring such as f1,roc_auc,recall.
 
 Profit = 400*TP  - 200*FN - 100*FP
 
@@ -209,6 +224,7 @@ FN = -$200 ==> revenue from losing a customer
 
                  Accuracy   Precision Recall       F1-score       AUC  Profit
 -------------------------------------------------------------------------------
+LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
 xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500
