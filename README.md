@@ -10,12 +10,12 @@ sklearn models.
 
 In real life the cost of misclassifying leaving customer and not-leaving
 customer is different. In this project I defined the PROFIT metric as following:
-
+```
 profit = +$400  for TP (true positive)
 profit = 0      for TN (true negative)
 profit = -$100  for FP (false positive)
 profit = -$200  for FN (false negative)
-
+```
 After testing various models with extensive feature engineering, I found that
 the logistic regression cv algorithm gave the best profit.
 
