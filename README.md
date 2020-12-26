@@ -78,19 +78,17 @@ profit = 82,500
 ```
 
 # Boosting: Xgboost
-- Used minimal feature engineering.
-- Get dummy featrues using `drop_first=False`
-- Used xgb classifier with validation set and eval metric `aucpr`.
+- Used custom data cleaning.
+- Used xgb classifier with custom scoring function from Hyperband.
 
 ```
-         Accuracy Precision  Recall  F1-score AUC
-xgboost  0.7417   0.5083     0.8235  0.6286   0.7678
+           Accuracy  Precision    Recall    F1-score    AUC
+xgboost    0.7097    0.4749       0.8850    0.6181    0.7657
 
-[[737 298]
- [ 66 308]]
+[[669 366]
+ [ 43 331]]
 
-profit = 400*308 - 200*66 - 100*298
-       = 80,200
+Profit = $87,200
 ```
 
 # Modelling Pycaret
@@ -224,9 +222,9 @@ FN = -$200 ==> revenue from losing a customer
 
                  Accuracy   Precision Recall       F1-score       AUC  Profit
 -------------------------------------------------------------------------------
+xgboost          0.7097     0.4749    0.8850       0.6181    0.7657    $87,200
 LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
-xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500
 pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  $76,000
 pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  $69,300
