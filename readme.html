@@ -2,7 +2,10 @@
 <p>In this project I used the <a href="https://www.kaggle.com/blastchar/telco-customer-churn">Kaggle Customer Churn</a> data to determine whether the customer will churn (leave the company) or not. I splitted the kaggle training data into train and test (80%/20%) and fitted the models using train data and evaluated model results in test data.</p>
 <p>I used mainly the semi automatic learning module <code>pycaret</code> for this project. I also used usual boosting modules (<code>xgboost,lightgbm,catboost</code>) and regular sklearn models.</p>
 <p>In real life the cost of misclassifying leaving customer and not-leaving customer is different. In this project I defined the PROFIT metric as following:</p>
-<p>profit = +$400 for TP (true positive) profit = 0 for TN (true negative) profit = -$100 for FP (false positive) profit = -$200 for FN (false negative)</p>
+<pre><code>profit = +$400  for TP (true positive)
+profit = 0      for TN (true negative)
+profit = -$100  for FP (false positive)
+profit = -$200  for FN (false negative)</code></pre>
 <p>After testing various models with extensive feature engineering, I found that the logistic regression cv algorithm gave the best profit.</p>
 <h1 id="data-description">Data description</h1>
 <p><img src="images/data_describe.png" /></p>
@@ -57,20 +60,27 @@ LRCV    0.7367    0.5024    0.8396    0.6286    0.7695
  [ 60 314]]
 
 profit = 82,500</code></pre>
-<h1 id="boosting-xgboost">Boosting: Xgboost</h1>
+<h1 id="boosting-xgboost-and-catboost">Boosting: Xgboost and catboost</h1>
 <ul>
-<li>Used minimal feature engineering.</li>
-<li>Get dummy featrues using <code>drop_first=False</code></li>
-<li>Used xgb classifier with validation set and eval metric <code>aucpr</code>.</li>
+<li>Used custom data cleaning.</li>
+<li>Used xgb classifier with custom scoring function from Hyperband.</li>
 </ul>
-<pre><code>         Accuracy Precision  Recall  F1-score AUC
-xgboost  0.7417   0.5083     0.8235  0.6286   0.7678
+<pre><code>           Accuracy  Precision    Recall    F1-score    AUC
+xgboost    0.7097    0.4749       0.8850    0.6181    0.7657
 
-[[737 298]
+[[669 366]
+ [ 43 331]]
+
+Profit = $87,200
+
+
+CatBoostClassifier + optuna
+                   Accuracy     Precision Recall    F1-score    AUC
+catboost+optuna    0.7204       0.4843    0.8235    0.6099    0.7533
+[[707 328]
  [ 66 308]]
 
-profit = 400*308 - 200*66 - 100*298
-       = 80,200</code></pre>
+ profit = $77,200</code></pre>
 <h1 id="modelling-pycaret">Modelling Pycaret</h1>
 <ul>
 <li>Used detailed cleaned data.</li>
@@ -152,22 +162,22 @@ profit = 400*207 - 200*167 - 100*118
 <li>Used <code>class_weight</code> parameter to deal with imbalanced data.</li>
 <li>Tuned keras model with scikitlearn <code>GridSearchCV</code></li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Model parameters</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>{<span class="st">&#39;activation&#39;</span>: <span class="st">&#39;sigmoid&#39;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;batch_size&#39;</span>: <span class="dv">128</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;epochs&#39;</span>: <span class="dv">30</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;n_feats&#39;</span>: <span class="dv">43</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;units&#39;</span>: (<span class="dv">45</span>, <span class="dv">30</span>, <span class="dv">15</span>)}</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>NOTE: The result changes each time even <span class="cf">if</span> I <span class="bu">set</span> SEED <span class="cf">for</span> everything.</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      Accuracy  Precision Recall    F1<span class="op">-</span>score    AUC</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>keras <span class="fl">0.6849</span>    <span class="fl">0.4422</span>    <span class="fl">0.7166</span>    <span class="fl">0.5469</span>    <span class="fl">0.6950</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">697</span> <span class="dv">338</span>]</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>profit <span class="op">=</span> <span class="dv">400</span><span class="op">*</span><span class="dv">268</span> <span class="op">-</span> <span class="dv">200</span><span class="op">*</span><span class="dv">106</span> <span class="op">-</span> <span class="dv">100</span><span class="op">*</span><span class="dv">338</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>       <span class="op">=</span> <span class="dv">52</span>,<span class="dv">200</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Model parameters</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>{<span class="st">&#39;activation&#39;</span>: <span class="st">&#39;sigmoid&#39;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;batch_size&#39;</span>: <span class="dv">128</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;epochs&#39;</span>: <span class="dv">30</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;n_feats&#39;</span>: <span class="dv">43</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;units&#39;</span>: (<span class="dv">45</span>, <span class="dv">30</span>, <span class="dv">15</span>)}</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>NOTE: The result changes each time even <span class="cf">if</span> I <span class="bu">set</span> SEED <span class="cf">for</span> everything.</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      Accuracy  Precision Recall    F1<span class="op">-</span>score    AUC</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>keras <span class="fl">0.6849</span>    <span class="fl">0.4422</span>    <span class="fl">0.7166</span>    <span class="fl">0.5469</span>    <span class="fl">0.6950</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">697</span> <span class="dv">338</span>]</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>profit <span class="op">=</span> <span class="dv">400</span><span class="op">*</span><span class="dv">268</span> <span class="op">-</span> <span class="dv">200</span><span class="op">*</span><span class="dv">106</span> <span class="op">-</span> <span class="dv">100</span><span class="op">*</span><span class="dv">338</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       <span class="op">=</span> <span class="dv">52</span>,<span class="dv">200</span></span></code></pre></div>
 <h1 id="model-comparison">Model Comparison</h1>
 <pre><code>This is a imbalanced binary classification.
 The useful metrics are AUC and Recall.
@@ -189,10 +199,11 @@ FN = -$200 ==&gt; revenue from losing a customer
 
                  Accuracy   Precision Recall       F1-score       AUC  Profit
 -------------------------------------------------------------------------------
+xgboost          0.7097     0.4749    0.8850       0.6181    0.7657    $87,200
 LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
-xgboost          0.741661   0.508251  0.823529     0.628571  0.767803  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500
+catboost+optuna  0.7204     0.4843    0.8235       0.6099    0.7533    $77,200
 pycaret_nb       0.729595   0.494290  0.810160     0.613982  0.755322  $76,000
 pycaret_xgboost  0.760114   0.534221  0.751337     0.624444  0.757311  $69,300
 keras            0.684883   0.442244  0.716578     0.546939  0.695004  $52,200
