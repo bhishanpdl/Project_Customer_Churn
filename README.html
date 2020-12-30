@@ -2,11 +2,15 @@
 <p>In this project I used the <a href="https://www.kaggle.com/blastchar/telco-customer-churn">Kaggle Customer Churn</a> data to determine whether the customer will churn (leave the company) or not. I splitted the kaggle training data into train and test (80%/20%) and fitted the models using train data and evaluated model results in test data.</p>
 <p>I used mainly the semi automatic learning module <code>pycaret</code> for this project. I also used usual boosting modules (<code>xgboost,lightgbm,catboost</code>) and regular sklearn models.</p>
 <p>In real life the cost of misclassifying leaving customer and not-leaving customer is different. In this project I defined the PROFIT metric as following:</p>
-<pre><code>profit = +$400  for TP (true positive)
-profit = 0      for TN (true negative)
-profit = -$100  for FP (false positive)
-profit = -$200  for FN (false negative)</code></pre>
-<p>After testing various models with extensive feature engineering, I found that the logistic regression cv algorithm gave the best profit.</p>
+<pre><code>profit = +$400  for TP : incentivize the customer to stay, and sign a new contract.
+profit = 0      for TN : nothing is lost
+profit = -$100  for FP : marketing and effort used to try to retain the user
+profit = -$200  for FN : revenue lost from losing a customer
+
+TP = true positive
+FP = false positive
+FN = false negative</code></pre>
+<p>After testing various models with extensive feature engineering, I found that the xgboost algorithm gave the best profit.</p>
 <h1 id="data-description">Data description</h1>
 <p><img src="images/data_describe.png" /></p>
 <h1 id="data-processing">Data Processing</h1>
@@ -76,11 +80,11 @@ Profit = $87,200
 
 CatBoostClassifier + optuna
                    Accuracy     Precision Recall    F1-score    AUC
-catboost+optuna    0.7048       0.4698    0.8743    0.6112    0.7589
-[[666 369]
- [ 47 327]]
+catboost+optuna    0.6955       0.4618    0.8877    0.6075      0.7569
+[[648 387]
+ [ 42 332]]
 
- profit = $84,500</code></pre>
+ profit = $85,700</code></pre>
 <h1 id="modelling-pycaret">Modelling Pycaret</h1>
 <ul>
 <li>Used detailed cleaned data.</li>
@@ -195,12 +199,12 @@ Profit = 400*TP  - 200*FN - 100*FP
 TP = +$400 ==&gt; incentivize the customer to stay, and sign a new contract.
 TN = 0
 FP = -$100 ==&gt; marketing and effort used to try to retain the user
-FN = -$200 ==&gt; revenue from losing a customer
+FN = -$200 ==&gt; revenue lost from losing a customer
 
                  Accuracy   Precision Recall       F1-score       AUC  Profit
 -------------------------------------------------------------------------------
 xgboost          0.7097     0.4749    0.8850       0.6181    0.7657    $87,200
-catboost+optuna  0.7048     0.4698    0.8743       0.6112    0.7589    $84,500
+catboost+optuna  0.6955     0.4618    0.8877       0.6075    0.7569    $85,700
 LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500

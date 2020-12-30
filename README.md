@@ -11,13 +11,17 @@ sklearn models.
 In real life the cost of misclassifying leaving customer and not-leaving
 customer is different. In this project I defined the PROFIT metric as following:
 ```
-profit = +$400  for TP (true positive)
-profit = 0      for TN (true negative)
-profit = -$100  for FP (false positive)
-profit = -$200  for FN (false negative)
+profit = +$400  for TP : incentivize the customer to stay, and sign a new contract.
+profit = 0      for TN : nothing is lost
+profit = -$100  for FP : marketing and effort used to try to retain the user
+profit = -$200  for FN : revenue lost from losing a customer
+
+TP = true positive
+FP = false positive
+FN = false negative
 ```
 After testing various models with extensive feature engineering, I found that
-the logistic regression cv algorithm gave the best profit.
+the xgboost algorithm gave the best profit.
 
 # Data description
 ![](images/data_describe.png)
@@ -30,7 +34,6 @@ the logistic regression cv algorithm gave the best profit.
 - Combination of features. e.g `SeniorCitizen + Dependents`.
 - Boolean Features. e.g. Does someone have Contract or not.
 - Aggregation features. eg. Mean of `TotalCharges` per `Contract`.
-
 
 # Sklearn Methods: LogisticRegression and LogisticRegressionCV
 - Used raw data with new features from EDA.
@@ -93,11 +96,11 @@ Profit = $87,200
 
 CatBoostClassifier + optuna
                    Accuracy     Precision Recall    F1-score    AUC
-catboost+optuna    0.7048       0.4698    0.8743    0.6112    0.7589
-[[666 369]
- [ 47 327]]
+catboost+optuna    0.6955       0.4618    0.8877    0.6075      0.7569
+[[648 387]
+ [ 42 332]]
 
- profit = $84,500
+ profit = $85,700
 ```
 
 # Modelling Pycaret
@@ -226,12 +229,12 @@ Profit = 400*TP  - 200*FN - 100*FP
 TP = +$400 ==> incentivize the customer to stay, and sign a new contract.
 TN = 0
 FP = -$100 ==> marketing and effort used to try to retain the user
-FN = -$200 ==> revenue from losing a customer
+FN = -$200 ==> revenue lost from losing a customer
 
                  Accuracy   Precision Recall       F1-score       AUC  Profit
 -------------------------------------------------------------------------------
 xgboost          0.7097     0.4749    0.8850       0.6181    0.7657    $87,200
-catboost+optuna  0.7048     0.4698    0.8743       0.6112    0.7589    $84,500
+catboost+optuna  0.6955     0.4618    0.8877       0.6075    0.7569    $85,700
 LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500
