@@ -1,7 +1,6 @@
 import os
 from sklearn import metrics as skmetrics
 
-
 # data
 dat_dir = os.path.join('..','data')
 
@@ -52,20 +51,57 @@ params_lr = dict(
     l1_ratios    = l1_ratios
     )
 
-params_lgb1 = {
-    'colsample_bytree' : 0.48709147773176875,
-    'reg_alpha'        : 0,
-    'reg_lambda'       : 0.04107179981116397,
-    'learning_rate'    : 0.7991073935301635,
-    'max_bin'          : 456,
-    'max_depth'        : 13,
-    'min_child_weight' : 0.03465070069968173,
-    'min_data_in_bin'  : 83,
-    'min_child_samples': 281,
-    'min_split_gain'   : 1.49,
-    'n_estimators'     : 5000,
-    'scale_pos_weight' : 9,
-    'subsample'        : 0.7857616414334825
-    }
+#================================ LightGBM ==================================================================
+# this is default parameters
+params_lgb0 = dict(
+    boosting_type     = 'gbdt',
+    num_leaves        = 31,
+    max_depth         = -1,
+    learning_rate     = 0.1,
+    n_estimators      = 100,
+    subsample_for_bin = 200000,
+    objective         = None,
+    class_weight      = None,
+    min_split_gain    = 0.0,
+    min_child_weight  = 0.001,
+    min_child_samples = 20,
+    subsample         = 1.0,
+    subsample_freq    = 0,
+    colsample_bytree  = 1.0,
+    reg_alpha         = 0.0,
+    reg_lambda        = 0.0,
+    random_state      = SEED,
+    n_jobs            = -1,
+    silent            = True,
+    importance_type   = 'split'
+)
 
-params_lgb = {'colsample_bytree': 0.5262112905471411, 'learning_rate': 0.5199550564232394, 'max_bin': 43, 'max_depth': 13, 'min_child_samples': 306, 'min_child_weight': 0.0019054209140305946, 'min_data_in_bin': 187, 'min_split_gain': 3.5100000000000002, 'n_estimators': 4600, 'num_leaves': 2, 'reg_alpha': 2.3316343178775068e-07, 'reg_lambda': 0, 'scale_pos_weight': 5, 'subsample': 0.7742077850067172}
+params_lgb1 = {'colsample_bytree': 0.707665744307114, 'learning_rate': 0.7858437768791948, 'max_bin': 248,
+               'max_depth': 6, 'min_child_samples': 381, 'min_child_weight': 1.65375790265872e-05,
+               'min_data_in_bin': 139, 'min_split_gain': 2.3000000000000003, 'n_estimators': 2200,
+               'num_leaves': 525, 'reg_alpha': 0, 'reg_lambda': 0,
+               'scale_pos_weight': 7,'subsample': 0.7273890631561498}
+
+params_lgb2 = {'colsample_bytree': 0.8757770860663306, 'learning_rate': 0.8718058384285751, 'max_bin': 71,
+               'max_depth': 10, 'min_child_samples': 337, 'min_child_weight': 0.0038481016662428053,
+               'min_data_in_bin': 196, 'min_split_gain': 3.75, 'n_estimators': 4400, 'num_leaves': 18,
+               'reg_alpha': 3.552634042044225e-07, 'reg_lambda': 5.754838317539429e-05,
+               'scale_pos_weight': 7,'subsample': 0.6747518226204151}
+
+params_lgb3 = {'colsample_bytree': 0.5262112905471411, 'learning_rate': 0.5199550564232394, 'max_bin': 43,
+               'max_depth': 13, 'min_child_samples': 306, 'min_child_weight': 0.0019054209140305946,
+               'min_data_in_bin': 187, 'min_split_gain': 3.5100000000000002, 'n_estimators': 4600,'num_leaves': 2,
+               'reg_alpha': 2.3316343178775068e-07, 'reg_lambda': 0,
+               'scale_pos_weight': 5, 'subsample': 0.7742077850067172}
+
+params_lgb4 = {'colsample_bytree': 0.7614216209026772, 'learning_rate': 0.816821855221229, 'max_bin': 114,
+               'max_depth': 27, 'min_child_samples': 411, 'min_child_weight': 2.1524026408064625e-05,
+               'min_data_in_bin': 71, 'min_split_gain': 3.4, 'n_estimators': 350, 'num_leaves': 466,
+               'reg_alpha': 7.08190801243234e-05, 'reg_lambda': 0,
+               'scale_pos_weight': 7,'subsample': 0.571824428670002}
+
+params_lgb = {'colsample_bytree': 0.7614216209026772, 'learning_rate': 0.816821855221229, 'max_bin': 114,
+               'max_depth': 27, 'min_child_samples': 411, 'min_child_weight': 2.1524026408064625e-05,
+               'min_data_in_bin': 71, 'min_split_gain': 3.4, 'n_estimators': 350, 'num_leaves': 466,
+               'reg_alpha': 7.08190801243234e-05, 'reg_lambda': 0,
+               'scale_pos_weight': 7,'subsample': 0.571824428670002}

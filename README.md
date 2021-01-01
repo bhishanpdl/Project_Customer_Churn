@@ -95,9 +95,25 @@ Profit = $87,200
 --------------------------------- lightgbm ------------------------------
                  Accuracy  Precision Recall    F1-score  AUC       profit
 lgb+hyperband    0.7069    0.4651    0.6952    0.5573    0.7031    $51,300
-lgb+hyperopt     0.6444    0.4228    0.9305    0.5815    0.7358    $86,500
-[[560 475]
- [ 26 348]]
+lgb+hyperopt     0.64088   0.419903  0.925134  0.577629  0.731649  $85,000
+
+I did a lot of hyperparameter tuning of lgb with hyperopt for multiple days.
+I got following results
+             5-foldCV   TestProfit
+params_lgb1  68,900     83,000
+params_lgb2  69,340     82,700
+params_lgb3  69,420     87,900 ** This has largest test profit, but less cv
+params_lgb4  69,480     85,000 ** We never see the test data, we only have train
+So, we must choose the parameters with highest cross validation score.
+Here params_lgb4 gives higher profit than params3, this means it is possible to
+get higher score but we need to get it along with higher validation score.
+We can try about 10k hyperopt trials, so far I have tried only upto 5k trials.
+Also, note that loading joblib trial file from hyperopt and running hyperopt
+trials, did not work for me, it gave me the same results and finished 10k trials
+in microsecond if I used parameter `trials=joblob loaded trials object`, this
+means we should run hyperopt trials with fresh trials and run for sufficient
+time, eg. 10k times.
+
 
 --------------------------------- catboost -------------------------------
                    Accuracy     Precision Recall    F1-score    AUC
@@ -243,12 +259,14 @@ Some Notes about comparing models:
   we use these hyperparams to see how it does in test.
   We can not change hyperparameter based on test results, but we can change
   based on validation results.
+- Here I have reported the test profit, but for model comparion we can report
+  cross-validation profit.
 
                  Accuracy   Precision Recall       F1-score  AUC       Profit
 -------------------------------------------------------------------------------
 xgboost          0.7097     0.4749    0.8850       0.6181    0.7657    $87,200
 catboost+optuna  0.6955     0.4618    0.8877       0.6075    0.7569    $85,700
-lgb+hyperopt     0.6302     0.4124    0.9251       0.5705    0.7244    $83,500
+lgb+hyperopt     0.64088   0.419903   0.925134     0.577629  0.731649  $85,000
 LRCV             0.7367     0.5024    0.8396       0.6286    0.7695    $82,500
 pycaret_lda      0.7062     0.4704    0.8503       0.6057    0.752200  $80,200
 pycaret_lr       0.750887   0.519931  0.802139     0.630915  0.767253  $77,500

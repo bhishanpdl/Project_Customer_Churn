@@ -5,6 +5,8 @@ import sklearn
 import config
 from IPython.display import display
 
+ENV_COLAB = False
+
 
 def clean_data(dfx):
     dfx = dfx.copy()
@@ -135,7 +137,7 @@ def print_time_taken(time_taken):
 
     print(f"\nTime Taken: {time_taken}")
 
-def model_eval_bin(model_name,ytest,ypreds,yprobs2d,show_plots=True):
+def model_eval_bin(model_name,ytest,ypreds,yprobs2d,show_plots=True,disp=True):
     import sklearn.metrics as skmetrics
     import scikitplot.metrics as skpmetrics
     import os
@@ -155,7 +157,10 @@ def model_eval_bin(model_name,ytest,ypreds,yprobs2d,show_plots=True):
                           'F1-score': [f1],
                           'AUC': [auc]},index=[model_name])
 
-    display(df_res.style.format("{:.4f}"))
+    if disp:
+        display(df_res.style.format("{:.4f}"))
+    else:
+        print(df_res)
     if not os.path.isdir('../outputs'):
         os.makedirs('../outputs')
     o = '.' if ENV_COLAB else '../outputs/'
