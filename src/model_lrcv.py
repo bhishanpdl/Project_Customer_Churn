@@ -83,7 +83,9 @@ transformer.fit(df_train)
 Xtrain = transformer.transform(df_train)
 Xtest = transformer.transform(df_test)
 
-# ================================================================
+# ============================================ Modelling ==================
+model_name = 'lrcv'
+
 # Modelling: LogisticRegressionCV
 params_lr = config.params_lr
 # params_lr.update(dict(max_iter=5000))
@@ -98,11 +100,10 @@ params_lr = config.params_lr
 df_preds = pd.DataFrame({index_name: [np.nan]*len(Xtrain),
                          'ytrain': np.nan,
                          'fold': np.nan,
-                         'pred_lrcv': np.nan,
-                         'pred_lrcv': np.nan
+                         f'pred_{model_name}': np.nan
                          })
 
-model_name = 'lrcv'
+
 pred_name = 'pred_' + model_name
 prob_name = 'prob_' + model_name
 skf = StratifiedKFold(shuffle=True, random_state=SEED, n_splits=5)

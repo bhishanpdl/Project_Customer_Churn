@@ -93,10 +93,11 @@ xgboost    0.7097    0.4749       0.8850    0.6181    0.7657
 
 Profit = $87,200
 --------------------------------- lightgbm ------------------------------
-                 Accuracy  Precision Recall    F1-score    AUC       profit
-lgb+hyperband    0.7069    0.4651    0.6952    0.5573      0.7031    $51,300
-lgb+hyperopt     0.6302    0.4124    0.9251    0.5705      0.7244    $83,500
-
+                 Accuracy  Precision Recall    F1-score  AUC       profit
+lgb+hyperband    0.7069    0.4651    0.6952    0.5573    0.7031    $51,300
+lgb+hyperopt     0.6444    0.4228    0.9305    0.5815    0.7358    $86,500
+[[560 475]
+ [ 26 348]]
 
 --------------------------------- catboost -------------------------------
                    Accuracy     Precision Recall    F1-score    AUC

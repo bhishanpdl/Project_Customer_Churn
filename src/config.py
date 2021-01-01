@@ -51,3 +51,21 @@ params_lr = dict(
     Cs           = Cs,
     l1_ratios    = l1_ratios
     )
+
+params_lgb1 = {
+    'colsample_bytree' : 0.48709147773176875,
+    'reg_alpha'        : 0,
+    'reg_lambda'       : 0.04107179981116397,
+    'learning_rate'    : 0.7991073935301635,
+    'max_bin'          : 456,
+    'max_depth'        : 13,
+    'min_child_weight' : 0.03465070069968173,
+    'min_data_in_bin'  : 83,
+    'min_child_samples': 281,
+    'min_split_gain'   : 1.49,
+    'n_estimators'     : 5000,
+    'scale_pos_weight' : 9,
+    'subsample'        : 0.7857616414334825
+    }
+
+params_lgb = {'colsample_bytree': 0.5262112905471411, 'learning_rate': 0.5199550564232394, 'max_bin': 43, 'max_depth': 13, 'min_child_samples': 306, 'min_child_weight': 0.0019054209140305946, 'min_data_in_bin': 187, 'min_split_gain': 3.5100000000000002, 'n_estimators': 4600, 'num_leaves': 2, 'reg_alpha': 2.3316343178775068e-07, 'reg_lambda': 0, 'scale_pos_weight': 5, 'subsample': 0.7742077850067172}
