@@ -87,16 +87,19 @@ I got following results
 params_lgb1  68,900     83,000
 params_lgb2  69,340     82,700
 params_lgb3  69,420     87,900 ** This has largest test profit, but less cv
-params_lgb4  69,480     85,000 ** We never see the test data, we only have train
+params_lgb4  69,480     85,000 ** We never see the test data, we only see train data
+
+
 So, we must choose the parameters with highest cross validation score.
 Here params_lgb4 gives higher profit than params3, this means it is possible to
 get higher score but we need to get it along with higher validation score.
-We can try about 10k hyperopt trials, so far I have tried only upto 5k trials.
-Also, note that loading joblib trial file from hyperopt and running hyperopt
-trials, did not work for me, it gave me the same results and finished 10k trials
-in microsecond if I used parameter `trials=joblob loaded trials object`, this
-means we should run hyperopt trials with fresh trials and run for sufficient
-time, eg. 10k times.
+We can try about 10k hyperopt trials but so far I have tried only upto 5k trials.
+
+Note about hyperopt:
+When I dumped the hyperopt trial to a file and load again and used in hyperopt
+then, it gave me the same results in microseconds even if I run further thousands
+of trials. This means using old trials does not work. Always use new trials but
+we can pickle dump it so that we can see the trials history.
 
 
 --------------------------------- catboost -------------------------------
