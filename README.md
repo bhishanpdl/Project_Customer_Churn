@@ -1,7 +1,7 @@
 # Project Description
 In this project I used the [Kaggle Customer Churn](https://www.kaggle.com/blastchar/telco-customer-churn)
 data to determine whether the customer will churn (leave the company) or not.
-I splitted the kaggle training data into train and test (80%/20%) and fitted
+I split the kaggle training data into train and test (80%/20%) and fitted
 the models using train data and evaluated model results in test data.
 
 I used mainly the semi automatic learning module `pycaret` for this project.
@@ -41,7 +41,6 @@ the xgboost algorithm gave the best profit.
 - Used `yeo-johnson` transformers instead of standard scaling since the numerical features were not normal.
 - Tuned the model using [hyperband](https://github.com/thuijskens/scikit-hyperband) library.
 
-
 ```
       Accuracy  Precision Recall    F1-score    AUC
 LR    0.4450    0.3075    0.8717    0.4547    0.5812
@@ -69,7 +68,7 @@ profit = 400*326 - 200*48 - 100*734
        = 47400
 
 
-============================ LogisticRegressoinCv======================
+============================ LogisticRegressoinCV======================
         Accuracy  Precision Recall    F1-score    AUC
 LRCV    0.7367    0.5024    0.8396    0.6286    0.7695
 
@@ -173,7 +172,7 @@ pycaret_xgboost    0.7601  0.5342    0.7513  0.6244    0.7573
 profit = 400*281 - 200*93 - 100*245
        = 69,300
 
- Pycaret LDA (Takes medium time, 5 mintues)
+ Pycaret LDA (Takes medium time, 5 minutes)
 ================================================================
 - Used polynomial features and fix imbalanced data.
 
@@ -236,10 +235,12 @@ profit = 400*268 - 200*106 - 100*338
 
 ```
 This is a imbalanced binary classification.
-The useful metrics are AUC and Recall.
-Here I defined a custom metric "profit" based on confusin matrix elements.
+The useful metrics are F2-score and Recall.
+AUC is useful only when dataset is balanced.
+F1 is useful when precision and recall is equally important.
+Here I defined a custom metric "profit" based on confusion matrix elements.
 
-- Logistic regression cv algorigthm gave me the best profit.
+- Logistic regression cv algorithm gave me the best profit.
 - I used custom feature engineering of the data.
 - SMOTE oversampling gave worse result than no resampling.
   (note: I have used class_weight='balanced')
@@ -258,11 +259,11 @@ Some Notes about comparing models:
 - We should never directly compare test dataset, we may simply overfit the test
   data. It's like training test data and overfitting by best hyperparams.
 - We should compare validation splits and validation splits must have very small
-  standard deviation, then after we get hyperparams from training/validation,
+  standard deviation, then, after we get hyperparams from training/validation,
   we use these hyperparams to see how it does in test.
   We can not change hyperparameter based on test results, but we can change
   based on validation results.
-- Here I have reported the test profit, but for model comparion we can report
+- Here I have reported the test profit, but for model comparison we can report
   cross-validation profit.
 
                  Accuracy   Precision Recall       F1-score  AUC       Profit

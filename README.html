@@ -1,25 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>README.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
 <h1 id="project-description">Project Description</h1>
-<p>In this project I used the <a href="https://www.kaggle.com/blastchar/telco-customer-churn">Kaggle Customer Churn</a> data to determine whether the customer will churn (leave the company) or not. I splitted the kaggle training data into train and test (80%/20%) and fitted the models using train data and evaluated model results in test data.</p>
-<p>I used mainly the semi automatic learning module <code>pycaret</code> for this project. I also used usual boosting modules (<code>xgboost,lightgbm,catboost</code>) and regular sklearn models.</p>
-<p>In real life the cost of misclassifying leaving customer and not-leaving customer is different. In this project I defined the PROFIT metric as following:</p>
-<pre><code>profit = +$400  for TP : incentivize the customer to stay, and sign a new contract.
+<p>In this project I used the <a href="https://www.kaggle.com/blastchar/telco-customer-churn">Kaggle Customer Churn</a>
+data to determine whether the customer will churn (leave the company) or not.
+I split the kaggle training data into train and test (80%/20%) and fitted
+the models using train data and evaluated model results in test data.</p>
+<p>I used mainly the semi automatic learning module <code>pycaret</code> for this project.
+I also used usual boosting modules (<code>xgboost,lightgbm,catboost</code>) and regular
+sklearn models.</p>
+<p>In real life the cost of misclassifying leaving customer and not-leaving
+customer is different. In this project I defined the PROFIT metric as following:</p>
+<pre class="hljs"><code><div>profit = +$400  for TP : incentivize the customer to stay, and sign a new contract.
 profit = 0      for TN : nothing is lost
 profit = -$100  for FP : marketing and effort used to try to retain the user
 profit = -$200  for FN : revenue lost from losing a customer
 
 TP = true positive
 FP = false positive
-FN = false negative</code></pre>
-<p>After testing various models with extensive feature engineering, I found that the xgboost algorithm gave the best profit.</p>
+FN = false negative
+</div></code></pre>
+<p>After testing various models with extensive feature engineering, I found that
+the xgboost algorithm gave the best profit.</p>
 <h1 id="data-description">Data description</h1>
-<p><img src="images/data_describe.png" /></p>
+<p><img src="images/data_describe.png" alt=""></p>
 <h1 id="data-processing">Data Processing</h1>
 <ul>
 <li>Missing Value imputation for <code>TotalCharges</code> with 0.</li>
 <li>Label Encoding for features having 5 or less unique values.</li>
 <li>Binning Numerical Features.</li>
 <li>Combination of features. e.g <code>SeniorCitizen + Dependents</code>.</li>
-<li>Boolean Features. e.g. Does someone have Contract or not.</li>
+<li>Boolean Features. e.g. Does someone have Contract or not.</li>
 <li>Aggregation features. eg. Mean of <code>TotalCharges</code> per <code>Contract</code>.</li>
 </ul>
 <h1 id="sklearn-methods-logisticregression-and-logisticregressioncv">Sklearn Methods: LogisticRegression and LogisticRegressionCV</h1>
@@ -29,7 +404,7 @@ FN = false negative</code></pre>
 <li>Used <code>yeo-johnson</code> transformers instead of standard scaling since the numerical features were not normal.</li>
 <li>Tuned the model using <a href="https://github.com/thuijskens/scikit-hyperband">hyperband</a> library.</li>
 </ul>
-<pre><code>      Accuracy  Precision Recall    F1-score    AUC
+<pre class="hljs"><code><div>      Accuracy  Precision Recall    F1-score    AUC
 LR    0.4450    0.3075    0.8717    0.4547    0.5812
 
                                                          Predicted
@@ -39,7 +414,7 @@ Original no-Churn    [[301             734]               TN   FP
 Original Churn       [ 48              326]]              FN   TP
 
 
-Let&#39;s make following assumptions
+Let's make following assumptions
 TP = +$400
 TN = 0
 FP = -$100
@@ -55,20 +430,21 @@ profit = 400*326 - 200*48 - 100*734
        = 47400
 
 
-============================ LogisticRegressoinCv======================
+============================ LogisticRegressoinCV======================
         Accuracy  Precision Recall    F1-score    AUC
 LRCV    0.7367    0.5024    0.8396    0.6286    0.7695
 
 [[724 311]
  [ 60 314]]
 
-profit = 82,500</code></pre>
+profit = 82,500
+</div></code></pre>
 <h1 id="boosting-xgboost-lightgbm-and-catboost">Boosting: Xgboost, lightgbm and catboost</h1>
 <ul>
 <li>Used custom data cleaning.</li>
 <li>Used xgb classifier with custom scoring function from Hyperband.</li>
 </ul>
-<pre><code>--------------------------------- xgboost -------------------------------
+<pre class="hljs"><code><div>--------------------------------- xgboost -------------------------------
            Accuracy  Precision    Recall    F1-score    AUC
 xgboost    0.7097    0.4749       0.8850    0.6181    0.7657
 
@@ -108,7 +484,8 @@ catboost+optuna    0.6955       0.4618    0.8877    0.6075      0.7569
 [[648 387]
  [ 42 332]]
 
- profit = $85,700</code></pre>
+ profit = $85,700
+</div></code></pre>
 <h1 id="modelling-pycaret">Modelling Pycaret</h1>
 <ul>
 <li>Used detailed cleaned data.</li>
@@ -119,8 +496,9 @@ catboost+optuna    0.6955       0.4618    0.8877    0.6075      0.7569
 <li>Used <code>tune-sklearn</code> algorithm to tune logistic regression.</li>
 <li>The model calibration in pycaret DID NOT improve the metric.</li>
 </ul>
-<p><img src="images/pycaret_compare_models.png" /> <img src="images/pycaret_lr.png" /></p>
-<pre><code>Pycaret Logistic Regression
+<p><img src="images/pycaret_compare_models.png" alt="">
+<img src="images/pycaret_lr.png" alt=""></p>
+<pre class="hljs"><code><div>Pycaret Logistic Regression
 ==============================================================
             Accuracy Precision Recall    F1-score    AUC
 pycaret_lr    0.7509 0.5199    0.8021    0.6309      0.7673
@@ -152,7 +530,7 @@ pycaret_xgboost    0.7601  0.5342    0.7513  0.6244    0.7573
 profit = 400*281 - 200*93 - 100*245
        = 69,300
 
- Pycaret LDA (Takes medium time, 5 mintues)
+ Pycaret LDA (Takes medium time, 5 minutes)
 ================================================================
 - Used polynomial features and fix imbalanced data.
 
@@ -164,20 +542,22 @@ pycaret_lda    0.7062    0.4704       0.8503    0.6057    0.7522
  [ 56 318]]
 
 profit = 400*318 - 200*56 - 100*358
-       = 80,200</code></pre>
+       = 80,200
+</div></code></pre>
 <h1 id="evalml-method">EvalML method</h1>
 <ul>
 <li>Minimal data processing (dropped gender and make some features numeric)</li>
 <li>evalml itself deals with missing values and categorical features.</li>
 </ul>
-<pre><code>          Accuracy  Precision Recall    F1-score  AUC
+<pre class="hljs"><code><div>          Accuracy  Precision Recall    F1-score  AUC
 evalml    0.7977    0.6369    0.5535    0.5923    0.7197
 
 [[917 118]
  [167 207]]
 
 profit = 400*207 - 200*167 - 100*118
-       = 37,600</code></pre>
+       = 37,600
+</div></code></pre>
 <h1 id="deep-learning-models">Deep Learning models</h1>
 <ul>
 <li>Used minimal data processing.</li>
@@ -188,31 +568,34 @@ profit = 400*207 - 200*167 - 100*118
 <li>Used <code>class_weight</code> parameter to deal with imbalanced data.</li>
 <li>Tuned keras model with scikitlearn <code>GridSearchCV</code></li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Model parameters</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>{<span class="st">&#39;activation&#39;</span>: <span class="st">&#39;sigmoid&#39;</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;batch_size&#39;</span>: <span class="dv">128</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;epochs&#39;</span>: <span class="dv">30</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;n_feats&#39;</span>: <span class="dv">43</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;units&#39;</span>: (<span class="dv">45</span>, <span class="dv">30</span>, <span class="dv">15</span>)}</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>NOTE: The result changes each time even <span class="cf">if</span> I <span class="bu">set</span> SEED <span class="cf">for</span> everything.</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      Accuracy  Precision Recall    F1<span class="op">-</span>score    AUC</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>keras <span class="fl">0.6849</span>    <span class="fl">0.4422</span>    <span class="fl">0.7166</span>    <span class="fl">0.5469</span>    <span class="fl">0.6950</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">697</span> <span class="dv">338</span>]</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a> [<span class="dv">106</span> <span class="dv">268</span>]]</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>profit <span class="op">=</span> <span class="dv">400</span><span class="op">*</span><span class="dv">268</span> <span class="op">-</span> <span class="dv">200</span><span class="op">*</span><span class="dv">106</span> <span class="op">-</span> <span class="dv">100</span><span class="op">*</span><span class="dv">338</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       <span class="op">=</span> <span class="dv">52</span>,<span class="dv">200</span></span></code></pre></div>
-<h1 id="model-comparison">Model Comparison</h1>
-<pre><code>This is a imbalanced binary classification.
-The useful metrics are AUC and Recall.
-Here I defined a custom metric &quot;profit&quot; based on confusin matrix elements.
+<pre class="hljs"><code><div>Model parameters
+{<span class="hljs-string">'activation'</span>: <span class="hljs-string">'sigmoid'</span>,
+ <span class="hljs-string">'batch_size'</span>: <span class="hljs-number">128</span>,
+ <span class="hljs-string">'epochs'</span>: <span class="hljs-number">30</span>,
+ <span class="hljs-string">'n_feats'</span>: <span class="hljs-number">43</span>,
+ <span class="hljs-string">'units'</span>: (<span class="hljs-number">45</span>, <span class="hljs-number">30</span>, <span class="hljs-number">15</span>)}
 
-- Logistic regression cv algorigthm gave me the best profit.
+NOTE: The result changes each time even <span class="hljs-keyword">if</span> I set SEED <span class="hljs-keyword">for</span> everything.
+
+      Accuracy  Precision Recall    F1-score    AUC
+keras <span class="hljs-number">0.6849</span>    <span class="hljs-number">0.4422</span>    <span class="hljs-number">0.7166</span>    <span class="hljs-number">0.5469</span>    <span class="hljs-number">0.6950</span>
+[[<span class="hljs-number">697</span> <span class="hljs-number">338</span>]
+ [<span class="hljs-number">106</span> <span class="hljs-number">268</span>]]
+
+profit = <span class="hljs-number">400</span>*<span class="hljs-number">268</span> - <span class="hljs-number">200</span>*<span class="hljs-number">106</span> - <span class="hljs-number">100</span>*<span class="hljs-number">338</span>
+       = <span class="hljs-number">52</span>,<span class="hljs-number">200</span>
+</div></code></pre>
+<h1 id="model-comparison">Model Comparison</h1>
+<pre class="hljs"><code><div>This is a imbalanced binary classification.
+The useful metrics are F2-score and Recall.
+AUC is useful only when dataset is balanced.
+F1 is useful when precision and recall is equally important.
+Here I defined a custom metric &quot;profit&quot; based on confusion matrix elements.
+
+- Logistic regression cv algorithm gave me the best profit.
 - I used custom feature engineering of the data.
 - SMOTE oversampling gave worse result than no resampling.
-  (note: I have used class_weight=&#39;balanced&#39;)
+  (note: I have used class_weight='balanced')
 - Elasticnet penalty gave worse result than l2 penalty.
 - Make custom loss scorer instead of default scoring such as f1,roc_auc,recall.
 
@@ -226,13 +609,13 @@ FN = -$200 ==&gt; revenue lost from losing a customer
 Some Notes about comparing models:
 
 - We should never directly compare test dataset, we may simply overfit the test
-  data. It&#39;s like training test data and overfitting by best hyperparams.
+  data. It's like training test data and overfitting by best hyperparams.
 - We should compare validation splits and validation splits must have very small
-  standard deviation, then after we get hyperparams from training/validation,
+  standard deviation, then, after we get hyperparams from training/validation,
   we use these hyperparams to see how it does in test.
   We can not change hyperparameter based on test results, but we can change
   based on validation results.
-- Here I have reported the test profit, but for model comparion we can report
+- Here I have reported the test profit, but for model comparison we can report
   cross-validation profit.
 
                  Accuracy   Precision Recall       F1-score  AUC       Profit
@@ -249,4 +632,8 @@ keras            0.684883   0.442244  0.716578     0.546939  0.695004  $52,200
 lgb+hyperband    0.7069     0.4651    0.6952       0.5573    0.7031    $51,300
 LR               0.444996   0.307547  0.871658     0.454672  0.581240  $47,400
 evalml           0.7977     0.6369    0.5535       0.5923    0.719700  $37,600
-lgb+optuna       0.7473     0.5262    0.4840       0.5042    0.6632    $17,500</code></pre>
+lgb+optuna       0.7473     0.5262    0.4840       0.5042    0.6632    $17,500
+</div></code></pre>
+
+</body>
+</html>
