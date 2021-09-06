@@ -123,7 +123,7 @@ catboost+optuna    0.6955       0.4618    0.8877    0.6075      0.7569
 [[648 387]
  [ 42 332]]
 
- profit = $85,700
+profit = $85,700
 ```
 
 # Modelling Pycaret
